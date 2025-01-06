@@ -1,91 +1,144 @@
-# @tanqory/sdk
+# Tanqory SDK
 
-## Overview
-@tanqory/sdk is a software development kit (SDK) designed to provide streamlined integrations and functionalities for interacting with Tanqory services. This SDK simplifies the process of working with Tanqory APIs by offering a clean and intuitive interface.
-
-## Features
-- **Authentication**: Built-in functions to handle authentication and token management.
-- **Form Handling**: Utilities for managing and validating forms.
-- **Configuration**: Centralized configuration for ease of setup and management.
-- **API Interaction**: Simplified HTTP requests using Axios.
-- **TypeScript Support**: Fully typed for enhanced developer experience.
+This is the official SDK for integrating with Tanqory services. It provides easy-to-use interfaces for authentication, product management, and form handling.
 
 ## Installation
-To install the SDK, use npm:
 
 ```bash
 npm install @tanqory/sdk
 ```
 
-Or using yarn:
-
-```bash
-yarn add @tanqory/sdk
-```
-
 ## Usage
-### Importing the SDK
-You can import and initialize the SDK in your project as follows:
+
+First, import and initialize the SDK with your JWT token:
 
 ```typescript
-import { Auth, Config, Form, Product } from '@tanqory/sdk';
+import TanqorySDK from '@tanqory/sdk';
 
-// Example: Setting up configuration
-Config.init({
-  apiBaseUrl: 'https://api.example.com',
+const sdk = new TanqorySDK('your-jwt-token');
+```
+
+### Authentication
+
+Access user profile information:
+
+```typescript
+try {
+  const profile = await sdk.auth.getProfile();
+  console.log(profile); // { id: string, name: string, email: string }
+} catch (error) {
+  console.error('Error:', error);
+}
+```
+
+### Product Management
+
+The SDK provides methods for managing products:
+
+```typescript
+// Get all products
+const products = await sdk.product.getProducts('site-id');
+
+// Get specific product
+const product = await sdk.product.getProduct('site-id', 'product-id');
+
+// Add new product
+const newProduct = await sdk.product.addProduct('site-id', {
+  id: 'product-id',
+  name: 'Product Name',
+  price: 99.99
 });
 
-// Example: Authenticating a user
-Auth.login({
-  username: 'user@example.com',
-  password: 'securepassword',
-}).then(response => console.log(response));
+// Update product
+const updatedProduct = await sdk.product.updateProduct('site-id', 'product-id', {
+  id: 'product-id',
+  name: 'Updated Name',
+  price: 149.99
+});
+
+// Remove product
+await sdk.product.removeProduct('site-id', 'product-id');
 ```
 
-### Modules
-#### 1. Authentication (`auth.ts`)
-Manages user authentication, including login and token handling.
+### Form Management
 
-#### 2. Configuration (`config.ts`)
-Centralizes configuration management.
+Work with forms and their data:
 
-#### 3. Form Utilities (`form.ts`)
-Handles form validation and management.
+```typescript
+// Get form schema
+const schema = await sdk.form.getSchema('form-id');
 
-#### 4. Product (`product.ts`)
-Provides functionalities related to product data.
+// Get all form documents
+const docs = await sdk.form.getDocs('site-id', 'form-id');
 
-#### 5. Index (`index.ts`)
-Exports all available modules for use in your project.
+// Get specific document
+const doc = await sdk.form.getDoc('site-id', 'form-id', 'data-id');
 
-## Scripts
-The following scripts are available in the project:
+// Add new document
+const newDoc = await sdk.form.addDoc('site-id', 'form-id', {
+  // your form data
+});
 
-- `npm start`: Starts the compiled JavaScript file.
-- `npm run build`: Compiles TypeScript files into JavaScript.
-- `npm run lint`: Checks code for linting errors.
-- `npm run lint:fix`: Fixes linting issues automatically.
+// Update document
+const updatedDoc = await sdk.form.updateDoc('site-id', 'form-id', 'data-id', {
+  // updated form data
+});
+
+// Delete document
+await sdk.form.deleteDoc('site-id', 'form-id', 'data-id');
+```
+
+## API Reference
+
+### TanqoryAuth
+
+- `getProfile()`: Returns user profile information
+
+### TanqoryProduct
+
+- `getProducts(siteId: string, params?: object)`: Get all products
+- `getProduct(siteId: string, productId: string)`: Get specific product
+- `addProduct(siteId: string, product: Product)`: Add new product
+- `updateProduct(siteId: string, productId: string, product: Product)`: Update existing product
+- `removeProduct(siteId: string, productId: string)`: Remove product
+
+### TanqoryForm
+
+- `getSchema(formId: string)`: Get form schema
+- `getDocs(siteId: string, formId: string, params?: object)`: Get all form documents
+- `getDoc(siteId: string, formId: string, dataId: string)`: Get specific document
+- `addDoc(siteId: string, formId: string, data: any)`: Add new document
+- `updateDoc(siteId: string, formId: string, dataId: string, data: any)`: Update document
+- `deleteDoc(siteId: string, formId: string, dataId: string)`: Delete document
+
+## Error Handling
+
+All methods return promises and can throw errors. It's recommended to use try-catch blocks:
+
+```typescript
+try {
+  const products = await sdk.product.getProducts('site-id');
+} catch (error) {
+  console.error('Error:', error);
+}
+```
 
 ## Development
-### Prerequisites
-Ensure you have the following installed:
-- Node.js (>=14.x)
-- npm or Yarn
-
-### Building the Project
-To build the project, run:
 
 ```bash
+# Install dependencies
+npm install
+
+# Build the project
 npm run build
+
+# Run linting
+npm run lint
+
+# Fix linting issues
+npm run lint:fix
 ```
 
-This compiles TypeScript files in the `src/` directory and outputs the JavaScript files to the `dist/` directory.
-
-## Contributing
-Contributions are welcome! If you encounter any issues or have suggestions for improvement, please open an issue or submit a pull request to the [GitHub repository](https://github.com/tanqory/tanqory-sdk).
-
 ## License
-This project is licensed under the MIT License. See the LICENSE file for details.
 
-## Support
-For any issues or inquiries, please visit the [GitHub issues page](https://github.com/tanqory/tanqory-sdk/issues).
+This project is licensed under the MIT License.
