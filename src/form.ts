@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { API_ENDPOINTS, BASE_URLS } from "./config";
+import { API_ENDPOINTS, BASE_URLS, Params } from "./config";
 
 export class TanqoryForm {
     private client: AxiosInstance;
@@ -24,7 +24,7 @@ export class TanqoryForm {
         }
     }
 
-    async getDocs(siteId: string, formId: string, params?: object): Promise<any> {
+    async getDocs(siteId: string, formId: string, params?: Params): Promise<any> {
         try {
             const response = await this.client.get(API_ENDPOINTS.form.getDocs(siteId, formId), { params });
             return response.data;

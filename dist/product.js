@@ -90,5 +90,31 @@ class TanqoryProduct {
             }
         });
     }
+    getCollections(siteId, params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            try {
+                const response = yield this.client.get(config_1.API_ENDPOINTS.product.getCollections(siteId), { params });
+                return response.data;
+            }
+            catch (error) {
+                console.error("Error fetching products:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
+                throw error;
+            }
+        });
+    }
+    getCollection(siteId, collectionId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            try {
+                const response = yield this.client.get(config_1.API_ENDPOINTS.product.getCollection(siteId, collectionId));
+                return response.data;
+            }
+            catch (error) {
+                console.error("Error fetching products:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
+                throw error;
+            }
+        });
+    }
 }
 exports.TanqoryProduct = TanqoryProduct;

@@ -7,11 +7,9 @@ export class TanqorySDK {
   public product: TanqoryProduct;
   public form: TanqoryForm;
 
-  constructor(jwtToken: string) {
-    this.auth = new TanqoryAuth(jwtToken);
-    this.product = new TanqoryProduct(jwtToken);
-    this.form = new TanqoryForm(jwtToken);
+  constructor(jwtToken?: string) {
+    this.auth = new TanqoryAuth(jwtToken || "");
+    this.product = new TanqoryProduct(jwtToken || "");
+    this.form = new TanqoryForm(jwtToken || "");
   }
 }
-
-export default TanqorySDK;
